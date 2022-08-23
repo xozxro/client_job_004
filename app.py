@@ -27,13 +27,17 @@ class appView(FlaskView):
         self.sentData = []
     
     # EXTENSION POSTS DATA
-    @route('/postNewData/', methods=['POST'])
+    @route('/postNewData', methods=['POST'])
     def postNewData(self) -> str:
+        print(True)
         
         if request.method == 'POST': 
             
             # get content
-            content = json.load(request, strict=False)
+            try:
+                content = json.load(request, strict=False)
+            except:
+                content = request.json
             
             # generate id
             id = random.randint(100000,900000)
@@ -43,7 +47,7 @@ class appView(FlaskView):
             
             # push content to server
             self.title = '['+content['eventName']+']('+str(content['checkoutURL'])+')'
-            self.webhook = DiscordWebhook(url='https://discord.com/api/webhooks/1001115041971585067/WvgMnD5e0gTReHZOE5mlAkJcOgSMdl4NW59iqKvi9FRv55fMPVucm6-eTliu-YkB5tKa', username='', content='')
+            self.webhook = DiscordWebhook(url='https://discord.com/api/webhooks/1008416489738616853/uTJZe1coksy76_CUbCybLYNy7PtKYLJ-oBgKA5oQXHKB-OzZ6mNe9JYpDpaMq5vdwM4D', username='', content='')
             self.embed = DiscordEmbed(title=content['eventName'], description=' > ' + content['eventDate'] + '  |  [*Ticket Link*](https://checkout.ticketmaster.com/35b0f95635c34818af6053d61c5cfd6d?ccp_src=2&ccp_channel=0&edp=https%3A%2F%2Fwww.ticketmaster.com%2Fmotley-cruedef-leppardpoisonjoan-jett-and-the-indianapolis-indiana-08-16-2022%2Fevent%2F05005C4FDA473AD6%3F_ga%3D2.144253937.558213141.1656781326-527735984.1656781326&f_appview=false&f_appview_ln=false&f_appview_version=1&f_layout=) | ID ' + str(id), color='00FFE4')
             self.embed.add_embed_field(name='Location:', value='\n'+content['eventLocation']+'\n')
             self.embed.add_embed_field(name='Ticket info:', value='\n'+content['ticketDetails']+'\n')
